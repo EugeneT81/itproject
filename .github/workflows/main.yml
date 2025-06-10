@@ -1,0 +1,13 @@
+name: my-first-CICD
+
+on:
+  push:
+    branches:
+      - master
+  jobs:
+    my_testing:
+      runs-on: ubunty-latest
+    steps:
+    - uses: actions/checout@v1
+    - name: script
+      run: echo Hello, world!
