@@ -7,7 +7,7 @@ on:
 jobs:
   my_testing:
     runs-on: ubuntu-latest
-  steps:
-   - uses: actions/checkout@v3
-   - name: script
-     run: echo Hello, world!
+    steps: 
+    - uses: actions/checkout@v1
+    - name: script
+      run: echo Hello, world!
