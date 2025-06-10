@@ -6,7 +6,7 @@ on:
       - master
   jobs:
     my_testing:
-      runs-on: ubunty-latest
+      runs-on: ubuntu-latest
     steps:
     - uses: actions/checout@v1
     - name: script
