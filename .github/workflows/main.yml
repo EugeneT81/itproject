@@ -7,22 +7,9 @@ on:
 
 jobs:
 
-  release_env:
-    runs-on: ubuntu-latest
-    outputs:
-      image_tag: ${{ steps.tag.outputs.image_tag }}
-
-    steps:
-      - id: tag
-        run: |
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            echo "image_tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          else
-            echo "image_tag=latest"  >> $GITHUB_OUTPUT
-          fi
 
   build:
-    needs: release_env
+    
     runs-on: ubuntu-latest
     
     steps:
@@ -37,7 +24,7 @@ jobs:
           docker images
 
   publish:
-    needs: [release_env, build]
+    needs: [build]
     runs-on: ubuntu-latest
 
     steps:
