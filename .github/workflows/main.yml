@@ -23,6 +23,11 @@ jobs:
           docker build -t eugene513/kube-image:${{ github.sha }} -f Dockerfile .
           docker images
           echo ${{ github.sha }}
+          
+      - name: Extract Docker image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        
 
   publish:
     needs: [build]
@@ -36,6 +41,7 @@ jobs:
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login \
             --username "${{ vars.DOCKER_USERNAME }}" \
             --password-stdin
+          echo ${{ steps.meta.outputs }}
 
       - name: Publish image
         run: |
