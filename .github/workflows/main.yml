@@ -34,6 +34,7 @@ jobs:
         run: |
           echo "Building with tag: ${{ needs.release_env.outputs.image_tag }}"
           docker build -t ${{ vars.IMAGE_NAME }}:${{ needs.release_env.outputs.image_tag }} .
+          docker images
 
   publish:
     needs: [release_env, build]
