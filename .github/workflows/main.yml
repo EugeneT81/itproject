@@ -16,8 +16,6 @@ jobs:
         run: |
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             echo "image_tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          else
-            echo "image_tag=latest"  >> $GITHUB_OUTPUT
           fi
      
   build_and_push:
