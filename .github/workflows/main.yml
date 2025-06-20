@@ -6,22 +6,8 @@ on:
       - main
 
 jobs:
-  release_env:
-    runs-on: ubuntu-latest
-    outputs:
-      image_tag: ${{ steps.tag.outputs.image_tag }}
-
-    steps:
-      - id: tag
-        run: |
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            echo "image_tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          else
-            echo "image_tag=latest"  >> $GITHUB_OUTPUT
-          fi
-          
+     
   build_and_push:
-    needs: [ release_env ]
     runs-on: ubuntu-latest
     steps:
       - name: Login to Docker Hub
@@ -37,4 +23,4 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ vars.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ needs.release_env.outputs.image_tag }}
+          tags: ${{ vars.DOCKER_USERNAME }}/${{ github.event.repository.name }}:latest
