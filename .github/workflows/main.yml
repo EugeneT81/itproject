@@ -37,4 +37,4 @@ jobs:
 
       - name: Publish image
         run: |
-          docker push eugene513/kube-image
+          docker push docker.io/eugene513/kube-image
