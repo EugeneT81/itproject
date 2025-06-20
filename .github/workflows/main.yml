@@ -20,8 +20,9 @@ jobs:
       - name: Build image
         run: |
           echo "Building with tag: ${{ needs.release_env.outputs.image_tag }}"
-          docker build -t eugene513/kube-image .
+          docker build -t eugene513/kube-image:${{ github.sha }} .
           docker images
+          echo ${{ github.sha }}
 
   publish:
     needs: [build]
@@ -37,4 +38,4 @@ jobs:
 
       - name: Publish image
         run: |
-          docker push docker.io/eugene513/kube-image
+          docker push docker.io/eugene513/kube-image:${{ github.sha }}
