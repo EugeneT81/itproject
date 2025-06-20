@@ -50,4 +50,4 @@ jobs:
 
       - name: Publish image
         run: |
-          docker push ${{ vars.IMAGE_NAME }}
+          docker push eugene513/kube-image
