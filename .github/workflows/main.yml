@@ -7,7 +7,7 @@ on:
 
 jobs:
   release_env:
-    runs-on: myrunner
+    runs-on: ubuntu-latest
     outputs:
       image_tag: ${{ steps.tag.outputs.image_tag }}
 
