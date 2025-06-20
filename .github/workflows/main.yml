@@ -7,42 +7,46 @@ on:
 
 jobs:
 
+  release_env:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+
+    steps:
+      - id: tag
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=latest"  >> $GITHUB_OUTPUT
+          fi
 
   build:
-    
+    needs: release_env
     runs-on: ubuntu-latest
     
     steps:
 
       - name: Checkout branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Build image
         run: |
-          echo "Building with tag: ${{ needs.release_env.outputs.image_tag }}"
-          docker build -t eugene513/kube-image:${{ github.sha }} -f Dockerfile .
-          docker images
-          echo ${{ github.sha }}
-          
-      - name: Extract Docker image metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        
+          echo "Building with tag: ${{ needs.release_env.outputs.tag }}"
+          docker build -t ${{ vars.IMAGE_NAME }}:${{ needs.release_env.outputs.tag }} -f .docker/Dockerfile .
 
   publish:
-    needs: [build]
+    needs: [release_env, build]
     runs-on: ubuntu-latest
 
     steps:
 
-
-      - name: Login to Docker Hub
-        run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login \
-            --username "${{ vars.DOCKER_USERNAME }}" \
-            --password-stdin
-          echo ${{ steps.meta.outputs }}
+      - name: Login to the registry
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Publish image
         run: |
-          docker push eugene513/kube-image:${{ github.sha }}
+          docker push ${{ vars.IMAGE_NAME }}:${{ needs.release_env.outputs.tag }}
