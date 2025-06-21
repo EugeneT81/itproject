@@ -14,9 +14,9 @@ jobs:
     steps:
       - id: tag
         run: |
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            echo "image_tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-          fi
+          echo "image_tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+            
+      
      
   build_and_push:
     needs: [release_env]
